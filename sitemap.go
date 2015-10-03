@@ -109,10 +109,6 @@ func SetInterval(time time.Duration) {
 	interval = time
 }
 
-func Interval() time.Duration {
-	return interval
-}
-
 func SetFetch(f func(url string) ([]byte, error)) {
 	fetch = f
 }

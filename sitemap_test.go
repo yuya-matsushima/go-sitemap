@@ -55,7 +55,6 @@ func TestGetRecivedSitemapIndexURL(t *testing.T) {
 func TestSetInterval(t *testing.T) {
 	newInterval := 3 * time.Second
 	SetInterval(newInterval)
-	interval = Interval()
 
 	if interval != newInterval {
 		t.Error("interval should be time.Minute")
