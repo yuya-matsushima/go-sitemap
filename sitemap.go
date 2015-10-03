@@ -104,6 +104,7 @@ func (s *Index) get(data []byte) (Sitemap, error) {
 	return sitemap, err
 }
 
+// Parse create Sitemap data from text
 func Parse(data []byte) (Sitemap, error) {
 	var sitemap Sitemap
 	err := xml.Unmarshal(data, &sitemap)
@@ -111,6 +112,7 @@ func Parse(data []byte) (Sitemap, error) {
 	return sitemap, err
 }
 
+// ParseIndex create Index data from text
 func ParseIndex(data []byte) (Index, error) {
 	var index Index
 	err := xml.Unmarshal(data, &index)
@@ -118,10 +120,12 @@ func ParseIndex(data []byte) (Index, error) {
 	return index, err
 }
 
+// SetInterval change Time interval to be used in Index.get
 func SetInterval(time time.Duration) {
 	interval = time
 }
 
+// SetFetch change fetch closure
 func SetFetch(f func(url string) ([]byte, error)) {
 	fetch = f
 }
