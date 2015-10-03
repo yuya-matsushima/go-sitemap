@@ -112,3 +112,7 @@ func SetInterval(time time.Duration) {
 func Interval() time.Duration {
 	return interval
 }
+
+func SetFetch(f func(url string) ([]byte, error)) {
+	fetch = f
+}

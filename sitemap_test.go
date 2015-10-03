@@ -66,6 +66,22 @@ func TestSetInterval(t *testing.T) {
 	}
 }
 
+func TestSetFetch(t *testing.T) {
+	f := func(url string) ([]byte, error) {
+		var err error
+		return []byte(url), err
+	}
+
+	SetFetch(f)
+
+	url := "http://example.com"
+	data, _ := fetch(url)
+
+	if string(data) != url {
+		t.Error("fetch(url) should return " + url)
+	}
+}
+
 func BenchmarkReadSitemapXML(b *testing.B) {
 	server := server()
 	defer server.Close()
