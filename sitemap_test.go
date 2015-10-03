@@ -16,8 +16,8 @@ func TestGet(t *testing.T) {
 
 	data, err := Get(server.URL + "/sitemap.xml")
 
-	if len(data.URL) == 0 {
-		t.Error("Get() should return Some Sitemap.Url data")
+	if len(data.URL) != 13 {
+		t.Error("Get() should return Sitemap.Url(13 length)")
 	}
 
 	if err != nil {
@@ -43,12 +43,30 @@ func TestGetRecivedSitemapIndexURL(t *testing.T) {
 	SetInterval(time.Nanosecond)
 	data, err := Get(server.URL + "/sitemapindex.xml")
 
-	if len(data.URL) == 0 {
-		t.Error("Get() should return Some Sitemap.Url data")
+	if len(data.URL) != 39 {
+		t.Error("Get() should return Sitemap.Url(39 length)")
 	}
 
 	if err != nil {
 		t.Error("Get() should not has error")
+	}
+}
+
+func TestParse(t *testing.T) {
+	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+	sitemap, _ := Parse(data)
+
+	if len(sitemap.URL) != 13 {
+		t.Error("Parse() should return Sitemap.URL(13 length)")
+	}
+}
+
+func TestParseIndex(t *testing.T) {
+	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+	index, _ := ParseIndex(data)
+
+	if len(index.Sitemap) != 3 {
+		t.Error("ParseIndex() should return Index.Sitemap(3 length)")
 	}
 }
 
