@@ -52,7 +52,7 @@ var fetch = func(url string) ([]byte, error) {
 }
 
 // Get sitemap data from URL
-func GetSitemap(url string) (Sitemap, error) {
+func Get(url string) (Sitemap, error) {
 	var index Index
 	var sitemap Sitemap
 

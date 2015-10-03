@@ -9,57 +9,57 @@ import (
 	"testing"
 )
 
-func TestGetSitemap(t *testing.T) {
+func TestGet(t *testing.T) {
 	server := server()
 	defer server.Close()
 
-	data, err := GetSitemap(server.URL + "/sitemap.xml")
+	data, err := Get(server.URL + "/sitemap.xml")
 
 	if len(data.URL) == 0 {
-		t.Error("GetSitemap() should return Some Sitemap.Url data")
+		t.Error("Get() should return Some Sitemap.Url data")
 	}
 
 	if err != nil {
-		t.Error("GetSitemap() should not has error")
+		t.Error("Get() should not has error")
 	}
 }
 
-func TestGetSitemapRecivedInvalidSitemapURL(t *testing.T) {
+func TestGetRecivedInvalidSitemapURL(t *testing.T) {
 	server := server()
 	defer server.Close()
 
-	_, err := GetSitemap(server.URL + "/emptymap.xml")
+	_, err := Get(server.URL + "/emptymap.xml")
 
 	if err == nil {
-		t.Error("GetSitemap() should return error")
+		t.Error("Get() should return error")
 	}
 }
 
-func TestGetSitemapRecivedSitemapIndexURL(t *testing.T) {
+func TestGetRecivedSitemapIndexURL(t *testing.T) {
 	server := server()
 	defer server.Close()
 
-	data, err := GetSitemap(server.URL + "/sitemapindex.xml")
+	data, err := Get(server.URL + "/sitemapindex.xml")
 
 	if len(data.URL) == 0 {
-		t.Error("GetSitemap() should return Some Sitemap.Url data")
+		t.Error("Get() should return Some Sitemap.Url data")
 	}
 
 	if err != nil {
-		t.Error("GetSitemap() should not has error")
+		t.Error("Get() should not has error")
 	}
 }
 
 func BenchmarkReadSitemapXML(b *testing.B) {
 	server := server()
 	defer server.Close()
-	GetSitemap(server.URL + "/sitemap.xml")
+	Get(server.URL + "/sitemap.xml")
 }
 
 func BenchmarkReadSitemapIndex(b *testing.B) {
 	server := server()
 	defer server.Close()
-	GetSitemap(server.URL + "/sitemapindex.xml")
+	Get(server.URL + "/sitemapindex.xml")
 }
 
 func server() *httptest.Server {
