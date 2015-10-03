@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"strings"
 	"testing"
+	"time"
 )
 
 func TestGet(t *testing.T) {
@@ -39,6 +40,7 @@ func TestGetRecivedSitemapIndexURL(t *testing.T) {
 	server := server()
 	defer server.Close()
 
+	SetInterval(time.Nanosecond)
 	data, err := Get(server.URL + "/sitemapindex.xml")
 
 	if len(data.URL) == 0 {
@@ -47,6 +49,20 @@ func TestGetRecivedSitemapIndexURL(t *testing.T) {
 
 	if err != nil {
 		t.Error("Get() should not has error")
+	}
+}
+
+func TestSetInterval(t *testing.T) {
+	newInterval := 3 * time.Second
+	SetInterval(newInterval)
+	interval = Interval()
+
+	if interval != newInterval {
+		t.Error("interval should be time.Minute")
+	}
+
+	if interval == time.Second {
+		t.Error("interval should not be Default(time.Second)")
 	}
 }
 

@@ -34,6 +34,7 @@ type URL struct {
 	Priority   float32 `xml:"priority"`
 }
 
+// fetch is page acquisition function
 var fetch = func(url string) ([]byte, error) {
 	var body []byte
 
@@ -50,6 +51,9 @@ var fetch = func(url string) ([]byte, error) {
 
 	return body, err
 }
+
+// Time interval to be used in Index.get
+var interval = time.Second
 
 // Get sitemap data from URL
 func Get(url string) (Sitemap, error) {
@@ -90,7 +94,7 @@ func (s *Index) get(data []byte) (Sitemap, error) {
 	}
 
 	for _, s := range index.Sitemap {
-		time.Sleep(time.Second) // TODO: sleep time will be option.
+		time.Sleep(interval)
 		data, err := fetch(s.Loc)
 		if err != nil {
 			return sitemap, err
@@ -99,4 +103,12 @@ func (s *Index) get(data []byte) (Sitemap, error) {
 	}
 
 	return sitemap, err
+}
+
+func SetInterval(time time.Duration) {
+	interval = time
+}
+
+func Interval() time.Duration {
+	return interval
 }
