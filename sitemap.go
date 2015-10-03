@@ -14,7 +14,7 @@ type Index struct {
 	Sitemap []parts  `xml:"sitemap"`
 }
 
-// Parts is a structure of <sitemap> in <sitemapindex>
+// parts is a structure of <sitemap> in <sitemapindex>
 type parts struct {
 	Loc     string `xml:"loc"`
 	LastMod string `xml:"lastmod"`
