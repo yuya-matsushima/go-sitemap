@@ -3,7 +3,6 @@ package sitemap
 import (
 	"encoding/xml"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
