@@ -102,23 +102,35 @@ func TestSetFetch(t *testing.T) {
 func BenchmarkGetSitemap(b *testing.B) {
 	server := server()
 	defer server.Close()
-	Get(server.URL + "/sitemap.xml")
+
+	for i := 0; i < b.N; i++ {
+		Get(server.URL + "/sitemap.xml")
+	}
 }
 
 func BenchmarkGetSitemapIndex(b *testing.B) {
 	server := server()
 	defer server.Close()
-	Get(server.URL + "/sitemapindex.xml")
+
+	for i := 0; i < b.N; i++ {
+		Get(server.URL + "/sitemapindex.xml")
+	}
 }
 
 func BenchmarkParseSitemap(b *testing.B) {
 	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
-	Parse(data)
+
+	for i := 0; i < b.N; i++ {
+		Parse(data)
+	}
 }
 
 func BenchmarkParseSitemapIndex(b *testing.B) {
 	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
-	ParseIndex(data)
+
+	for i := 0; i < b.N; i++ {
+		ParseIndex(data)
+	}
 }
 
 func server() *httptest.Server {
