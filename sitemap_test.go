@@ -99,16 +99,26 @@ func TestSetFetch(t *testing.T) {
 	}
 }
 
-func BenchmarkReadSitemapXML(b *testing.B) {
+func BenchmarkGetSitemap(b *testing.B) {
 	server := server()
 	defer server.Close()
 	Get(server.URL + "/sitemap.xml")
 }
 
-func BenchmarkReadSitemapIndex(b *testing.B) {
+func BenchmarkGetSitemapIndex(b *testing.B) {
 	server := server()
 	defer server.Close()
 	Get(server.URL + "/sitemapindex.xml")
+}
+
+func BenchmarkParseSitemap(b *testing.B) {
+	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+	Parse(data)
+}
+
+func BenchmarkParseSitemapIndex(b *testing.B) {
+	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+	ParseIndex(data)
 }
 
 func server() *httptest.Server {
