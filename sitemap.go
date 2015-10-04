@@ -35,10 +35,10 @@ type URL struct {
 }
 
 // fetch is page acquisition function
-var fetch = func(url string) ([]byte, error) {
+var fetch = func(URL string) ([]byte, error) {
 	var body []byte
 
-	res, err := http.Get(url)
+	res, err := http.Get(URL)
 	if err != nil {
 		return body, err
 	}
