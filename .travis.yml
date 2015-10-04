@@ -9,6 +9,7 @@ install:
 script:
   - test -z "$(golint ./... | tee /dev/stderr)"
   - go test -v ./...
+  - go test -v -bench .
 matrix:
   allow_failures:
     - go: tip
