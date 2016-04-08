@@ -35,7 +35,7 @@ type URL struct {
 }
 
 // fetch is page acquisition function
-var fetch = func(URL string, timeout int64) ([]byte, error) {
+var fetch = func(URL string) ([]byte, error) {
 	var body []byte
 
 	res, err := http.Get(URL)
@@ -52,15 +52,12 @@ var fetch = func(URL string, timeout int64) ([]byte, error) {
 	return body, err
 }
 
-// timeout is setting for fetch
-var timeout int64 = 10
-
 // Time interval to be used in Index.get
 var interval = time.Second
 
 // Get sitemap data from URL
 func Get(url string) (Sitemap, error) {
-	data, err := fetch(url, timeout)
+	data, err := fetch(url)
 	if err != nil {
 		return Sitemap{}, err
 	}
@@ -93,7 +90,7 @@ func (s *Index) get(data []byte) (Sitemap, error) {
 	var sitemap Sitemap
 	for _, s := range index.Sitemap {
 		time.Sleep(interval)
-		data, err := fetch(s.Loc, timeout)
+		data, err := fetch(s.Loc)
 		if err != nil {
 			return sitemap, err
 		}
@@ -129,6 +126,6 @@ func SetInterval(time time.Duration) {
 }
 
 // SetFetch change fetch closure
-func SetFetch(f func(url string, timeout int64) ([]byte, error)) {
+func SetFetch(f func(url string) ([]byte, error)) {
 	fetch = f
 }
