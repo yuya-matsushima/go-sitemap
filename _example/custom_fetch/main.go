@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/yterajima/go-sitemap"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"time"
+
+	"github.com/yterajima/go-sitemap"
 )
 
 func main() {
@@ -27,7 +28,7 @@ func main() {
 	}
 }
 
-func myFetch(URL string) ([]byte, error) {
+func myFetch(URL string, timeout int64) ([]byte, error) {
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return []byte{}, err
@@ -37,9 +38,9 @@ func myFetch(URL string) ([]byte, error) {
 	req.Header.Set("User-Agent", "MyBot")
 
 	// Set timeout
-	timeout := time.Duration(10 * time.Second)
+	duration := time.Duration(timeout) * time.Second
 	client := http.Client{
-		Timeout: timeout,
+		Timeout: duration,
 	}
 
 	// Fetch data

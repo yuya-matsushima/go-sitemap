@@ -84,7 +84,7 @@ func TestSetInterval(t *testing.T) {
 }
 
 func TestSetFetch(t *testing.T) {
-	f := func(url string) ([]byte, error) {
+	f := func(url string, timeout int64) ([]byte, error) {
 		var err error
 		return []byte(url), err
 	}
@@ -92,10 +92,10 @@ func TestSetFetch(t *testing.T) {
 	SetFetch(f)
 
 	url := "http://example.com"
-	data, _ := fetch(url)
+	data, _ := fetch(url, timeout)
 
 	if string(data) != url {
-		t.Error("fetch(url) should return " + url)
+		t.Error("fetch(url, timeout) should return " + url)
 	}
 }
 
