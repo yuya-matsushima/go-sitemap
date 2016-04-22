@@ -44,12 +44,7 @@ var fetch = func(URL string) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
-	body, err = ioutil.ReadAll(res.Body)
-	if err != nil {
-		return body, err
-	}
-
-	return body, err
+	return ioutil.ReadAll(res.Body)
 }
 
 // Time interval to be used in Index.get
