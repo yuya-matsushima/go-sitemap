@@ -57,62 +57,62 @@ func Get(url string) (Sitemap, error) {
 		return Sitemap{}, err
 	}
 
-	index, indexErr := ParseIndex(data)
-	sitemap, sitemapErr := Parse(data)
+	idx, idxErr := ParseIndex(data)
+	smap, smapErr := Parse(data)
 
-	if indexErr != nil && sitemapErr != nil {
+	if idxErr != nil && smapErr != nil {
 		err = errors.New("URL is not a sitemap or sitemapindex")
 		return Sitemap{}, err
 	}
 
-	if indexErr == nil {
-		sitemap, err = index.get(data)
+	if idxErr == nil {
+		smap, err = idx.get(data)
 		if err != nil {
 			return Sitemap{}, err
 		}
 	}
 
-	return sitemap, err
+	return smap, err
 }
 
 // Get Sitemap data from sitemapindex file
 func (s *Index) get(data []byte) (Sitemap, error) {
-	index, err := ParseIndex(data)
+	idx, err := ParseIndex(data)
 	if err != nil {
 		return Sitemap{}, err
 	}
 
-	var sitemap Sitemap
-	for _, s := range index.Sitemap {
+	var smap Sitemap
+	for _, s := range idx.Sitemap {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc)
 		if err != nil {
-			return sitemap, err
+			return smap, err
 		}
 
-		err = xml.Unmarshal(data, &sitemap)
+		err = xml.Unmarshal(data, &smap)
 		if err != nil {
-			return sitemap, err
+			return smap, err
 		}
 	}
 
-	return sitemap, err
+	return smap, err
 }
 
 // Parse create Sitemap data from text
 func Parse(data []byte) (Sitemap, error) {
-	var sitemap Sitemap
-	err := xml.Unmarshal(data, &sitemap)
+	var smap Sitemap
+	err := xml.Unmarshal(data, &smap)
 
-	return sitemap, err
+	return smap, err
 }
 
 // ParseIndex create Index data from text
 func ParseIndex(data []byte) (Index, error) {
-	var index Index
-	err := xml.Unmarshal(data, &index)
+	var idx Index
+	err := xml.Unmarshal(data, &idx)
 
-	return index, err
+	return idx, err
 }
 
 // SetInterval change Time interval to be used in Index.get

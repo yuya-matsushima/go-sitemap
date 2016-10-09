@@ -50,18 +50,18 @@ func TestGetRecivedSitemapIndexURL(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
-	sitemap, _ := Parse(data)
+	smap, _ := Parse(data)
 
-	if len(sitemap.URL) != 13 {
+	if len(smap.URL) != 13 {
 		t.Error("Parse() should return Sitemap.URL(13 length)")
 	}
 }
 
 func TestParseIndex(t *testing.T) {
 	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
-	index, _ := ParseIndex(data)
+	idx, _ := ParseIndex(data)
 
-	if len(index.Sitemap) != 3 {
+	if len(idx.Sitemap) != 3 {
 		t.Error("ParseIndex() should return Index.Sitemap(3 length)")
 	}
 }
