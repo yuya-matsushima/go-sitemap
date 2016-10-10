@@ -1,71 +1,60 @@
 package sitemap
 
 import (
-	"fmt"
 	"io/ioutil"
-	"net/http"
-	"net/http/httptest"
-	"strings"
 	"testing"
 	"time"
 )
+
+// getTest is structure for test
+type getTest struct {
+	smapName string
+	isNil    bool
+	count    int
+	comment  string
+}
+
+var getTests = []getTest{
+	{"sitemap.xml", true, 13, "normal test"},
+	{"empty.xml", false, 0, "This sitemap.xml is not exist."},
+	{"sitemapindex.xml", true, 39, "sitemap index test"},
+}
 
 func TestGet(t *testing.T) {
 	server := server()
 	defer server.Close()
 
-	data, err := Get(server.URL + "/sitemap.xml")
-
-	if len(data.URL) != 13 {
-		t.Error("Get() should return Sitemap.Url(13 length)")
-	}
-
-	if err != nil {
-		t.Error("Get() should not has error")
-	}
-}
-
-func TestGetRecivedInvalidSitemapURL(t *testing.T) {
-	server := server()
-	defer server.Close()
-
-	_, err := Get(server.URL + "/emptymap.xml")
-
-	if err == nil {
-		t.Error("Get() should return error")
-	}
-}
-
-func TestGetRecivedSitemapIndexURL(t *testing.T) {
-	server := server()
-	defer server.Close()
-
 	SetInterval(time.Nanosecond)
-	data, err := Get(server.URL + "/sitemapindex.xml")
 
-	if len(data.URL) != 39 {
-		t.Error("Get() should return Sitemap.Url(39 length)")
-	}
+	for i, test := range getTests {
+		data, err := Get(server.URL + "/" + test.smapName)
 
-	if err != nil {
-		t.Error("Get() should not has error")
+		if test.isNil == true && err != nil {
+			t.Errorf("test:%d Get() should not has error:%s", i, err.Error())
+		} else if test.isNil == false && err == nil {
+			t.Errorf("test:%d Get() should has error", i)
+		}
+
+		if test.count != len(data.URL) {
+			t.Errorf("test:%d Get() should return Sitemap.Url:%d actual: %d", i, test.count, len(data.URL))
+		}
 	}
 }
 
 func TestParse(t *testing.T) {
 	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
-	sitemap, _ := Parse(data)
+	smap, _ := Parse(data)
 
-	if len(sitemap.URL) != 13 {
+	if len(smap.URL) != 13 {
 		t.Error("Parse() should return Sitemap.URL(13 length)")
 	}
 }
 
 func TestParseIndex(t *testing.T) {
 	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
-	index, _ := ParseIndex(data)
+	idx, _ := ParseIndex(data)
 
-	if len(index.Sitemap) != 3 {
+	if len(idx.Sitemap) != 3 {
 		t.Error("ParseIndex() should return Index.Sitemap(3 length)")
 	}
 }
@@ -131,23 +120,4 @@ func BenchmarkParseSitemapIndex(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		ParseIndex(data)
 	}
-}
-
-func server() *httptest.Server {
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.RequestURI == "" {
-			// index page is always not found
-			http.NotFound(w, r)
-		}
-
-		res, err := ioutil.ReadFile("./testdata" + r.RequestURI)
-		if err != nil {
-			http.NotFound(w, r)
-		}
-		str := strings.Replace(string(res), "HOST", r.Host, -1)
-		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, str)
-	}))
-
-	return server
 }
