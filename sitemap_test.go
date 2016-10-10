@@ -6,45 +6,38 @@ import (
 	"time"
 )
 
+// getTest is structure for test
+type getTest struct {
+	smapName string
+	isNil    bool
+	count    int
+	comment  string
+}
+
+var getTests = []getTest{
+	{"sitemap.xml", true, 13, "normal test"},
+	{"empty.xml", false, 0, "This sitemap.xml is not exist."},
+	{"sitemapindex.xml", true, 39, "sitemap index test"},
+}
+
 func TestGet(t *testing.T) {
 	server := server()
 	defer server.Close()
 
-	data, err := Get(server.URL + "/sitemap.xml")
-
-	if len(data.URL) != 13 {
-		t.Error("Get() should return Sitemap.Url(13 length)")
-	}
-
-	if err != nil {
-		t.Error("Get() should not has error")
-	}
-}
-
-func TestGetRecivedInvalidSitemapURL(t *testing.T) {
-	server := server()
-	defer server.Close()
-
-	_, err := Get(server.URL + "/emptymap.xml")
-
-	if err == nil {
-		t.Error("Get() should return error")
-	}
-}
-
-func TestGetRecivedSitemapIndexURL(t *testing.T) {
-	server := server()
-	defer server.Close()
-
 	SetInterval(time.Nanosecond)
-	data, err := Get(server.URL + "/sitemapindex.xml")
 
-	if len(data.URL) != 39 {
-		t.Error("Get() should return Sitemap.Url(39 length)")
-	}
+	for i, test := range getTests {
+		data, err := Get(server.URL + "/" + test.smapName)
 
-	if err != nil {
-		t.Error("Get() should not has error")
+		if test.isNil == true && err != nil {
+			t.Errorf("test:%d Get() should not has error:%s", i, err.Error())
+		} else if test.isNil == false && err == nil {
+			t.Errorf("test:%d Get() should has error", i)
+		}
+
+		if test.count != len(data.URL) {
+			t.Errorf("test:%d Get() should return Sitemap.Url:%d actual: %d", i, test.count, len(data.URL))
+		}
 	}
 }
 
