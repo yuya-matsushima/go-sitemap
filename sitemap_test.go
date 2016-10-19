@@ -27,7 +27,7 @@ func TestGet(t *testing.T) {
 	SetInterval(time.Nanosecond)
 
 	for i, test := range getTests {
-		data, err := Get(server.URL + "/" + test.smapName)
+		data, err := Get(server.URL+"/"+test.smapName, nil)
 
 		if test.isNil == true && err != nil {
 			t.Errorf("test:%d Get() should not has error:%s", i, err.Error())
@@ -73,18 +73,18 @@ func TestSetInterval(t *testing.T) {
 }
 
 func TestSetFetch(t *testing.T) {
-	f := func(url string) ([]byte, error) {
+	f := func(URL string, options interface{}) ([]byte, error) {
 		var err error
-		return []byte(url), err
+		return []byte(URL), err
 	}
 
 	SetFetch(f)
 
-	url := "http://example.com"
-	data, _ := fetch(url)
+	URL := "http://example.com"
+	data, _ := fetch(URL, nil)
 
-	if string(data) != url {
-		t.Error("fetch(url) should return " + url)
+	if string(data) != URL {
+		t.Error("fetch() should return " + URL)
 	}
 }
 
@@ -93,7 +93,7 @@ func BenchmarkGetSitemap(b *testing.B) {
 	defer server.Close()
 
 	for i := 0; i < b.N; i++ {
-		Get(server.URL + "/sitemap.xml")
+		Get(server.URL+"/sitemap.xml", nil)
 	}
 }
 
@@ -102,7 +102,7 @@ func BenchmarkGetSitemapIndex(b *testing.B) {
 	defer server.Close()
 
 	for i := 0; i < b.N; i++ {
-		Get(server.URL + "/sitemapindex.xml")
+		Get(server.URL+"/sitemapindex.xml", nil)
 	}
 }
 
