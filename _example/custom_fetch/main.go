@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/yterajima/go-sitemap"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"time"
+
+	"github.com/yterajima/go-sitemap"
 )
 
 func main() {
@@ -16,7 +17,7 @@ func main() {
 
 	sitemap.SetFetch(myFetch)
 
-	smap, err := sitemap.Get(server.URL + "/sitemap.xml")
+	smap, err := sitemap.Get(server.URL+"/sitemap.xml", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -27,7 +28,7 @@ func main() {
 	}
 }
 
-func myFetch(URL string) ([]byte, error) {
+func myFetch(URL string, options interface{}) ([]byte, error) {
 	req, err := http.NewRequest("GET", URL, nil)
 	if err != nil {
 		return []byte{}, err
