@@ -1,14 +1,20 @@
 language: go
 sudo: false
+branches:
+  only:
+    - master
+    - develop
+    - feature/*
 go:
-  - 1.6.3
-  - 1.7
-  - 1.7.1
+  - 1.7.6
+  - 1.8.5
+  - 1.9.2
   - tip
 install:
   - go get -u github.com/golang/lint/golint
 script:
   - test -z "$(golint ./... | tee /dev/stderr)"
+  - go vet .
   - go test -v .
   - go test -v -bench . -benchmem
 matrix:

@@ -4,11 +4,18 @@ setup:
 	go get github.com/Songmu/make2help/cmd/make2help
 	go get -u -v github.com/mattn/go-colorable
 
-## Run Tests
+## test
 test:
-	go test -v .
+	go test -v -cover .
+
+## lint
+lint:
 	golint .
 	go vet .
+
+## benchmark
+benchmark:
+	go test -bench . -benchmem
 
 ## Show help
 help:
