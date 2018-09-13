@@ -61,18 +61,17 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 	smap, smapErr := Parse(data)
 
 	if idxErr != nil && smapErr != nil {
-		err = errors.New("URL is not a sitemap or sitemapindex")
+		return Sitemap{}, errors.New("URL is not a sitemap or sitemapindex")
+	} else if idxErr != nil {
+		return smap, nil
+	}
+
+	smap, err = idx.get(data, options)
+	if err != nil {
 		return Sitemap{}, err
 	}
 
-	if idxErr == nil {
-		smap, err = idx.get(data, options)
-		if err != nil {
-			return Sitemap{}, err
-		}
-	}
-
-	return smap, err
+	return smap, nil
 }
 
 // Get Sitemap data from sitemapindex file
