@@ -100,19 +100,15 @@ func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
 }
 
 // Parse create Sitemap data from text
-func Parse(data []byte) (Sitemap, error) {
-	var smap Sitemap
-	err := xml.Unmarshal(data, &smap)
-
-	return smap, err
+func Parse(data []byte) (smap Sitemap, err error) {
+	err = xml.Unmarshal(data, &smap)
+	return
 }
 
 // ParseIndex create Index data from text
-func ParseIndex(data []byte) (Index, error) {
-	var idx Index
-	err := xml.Unmarshal(data, &idx)
-
-	return idx, err
+func ParseIndex(data []byte) (idx Index, err error) {
+	err = xml.Unmarshal(data, &idx)
+	return
 }
 
 // SetInterval change Time interval to be used in Index.get
