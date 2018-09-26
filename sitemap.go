@@ -61,18 +61,17 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 	smap, smapErr := Parse(data)
 
 	if idxErr != nil && smapErr != nil {
-		err = errors.New("URL is not a sitemap or sitemapindex")
+		return Sitemap{}, errors.New("URL is not a sitemap or sitemapindex")
+	} else if idxErr != nil {
+		return smap, nil
+	}
+
+	smap, err = idx.get(data, options)
+	if err != nil {
 		return Sitemap{}, err
 	}
 
-	if idxErr == nil {
-		smap, err = idx.get(data, options)
-		if err != nil {
-			return Sitemap{}, err
-		}
-	}
-
-	return smap, err
+	return smap, nil
 }
 
 // Get Sitemap data from sitemapindex file
@@ -100,19 +99,15 @@ func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
 }
 
 // Parse create Sitemap data from text
-func Parse(data []byte) (Sitemap, error) {
-	var smap Sitemap
-	err := xml.Unmarshal(data, &smap)
-
-	return smap, err
+func Parse(data []byte) (smap Sitemap, err error) {
+	err = xml.Unmarshal(data, &smap)
+	return
 }
 
 // ParseIndex create Index data from text
-func ParseIndex(data []byte) (Index, error) {
-	var idx Index
-	err := xml.Unmarshal(data, &idx)
-
-	return idx, err
+func ParseIndex(data []byte) (idx Index, err error) {
+	err = xml.Unmarshal(data, &idx)
+	return
 }
 
 // SetInterval change Time interval to be used in Index.get
