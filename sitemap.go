@@ -85,12 +85,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 }
 
 // Get Sitemap data from sitemapindex file
-func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
-	idx, err := ParseIndex(data)
-	if err != nil {
-		return Sitemap{}, err
-	}
-
+func (idx *Index) get(data []byte, options interface{}) (Sitemap, error) {
 	var smap Sitemap
 	for _, s := range idx.Sitemap {
 		time.Sleep(interval)
@@ -105,7 +100,7 @@ func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
 		}
 	}
 
-	return smap, err
+	return smap, nil
 }
 
 // Get Sitemap data from asp sitemap file
