@@ -18,6 +18,7 @@ var getTests = []getTest{
 	{"sitemap.xml", true, 13, "normal test"},
 	{"empty.xml", false, 0, "This sitemap.xml is not exist."},
 	{"sitemapindex.xml", true, 39, "sitemap index test"},
+	{"aspsitemap.xml", true, 7, "aps.net sitemap"},
 }
 
 func TestGet(t *testing.T) {

@@ -20,7 +20,6 @@ func server() *httptest.Server {
 			http.NotFound(w, r)
 		}
 		str := strings.Replace(string(res), "HOST", r.Host, -1)
-		w.WriteHeader(http.StatusOK)
 		fmt.Fprintf(w, str)
 	}))
 
