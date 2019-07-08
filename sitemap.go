@@ -40,7 +40,7 @@ type Asp struct {
 	SitemapNodes []Node `xml:"siteMapNode"`
 }
 
-// SitemapNode is a structure of <SitemapNode> in <AspNet Sitemap-File>
+// Node is a structure of <sitemapNode> in <AspNet Sitemap-File>
 type Node struct {
 	URL          string        `xml:"url,attr"`
 	SitemapNodes []Node `xml:"siteMapNode"`
@@ -133,7 +133,7 @@ func ParseIndex(data []byte) (idx Index, err error) {
 	return
 }
 
-// ParseIndex create Asp data from text
+// ParseAsp create Asp data from text
 func ParseAsp(data []byte) (asp Asp, err error) {
 	err = xml.Unmarshal(data, &asp)
 	return
