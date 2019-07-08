@@ -34,14 +34,16 @@ type URL struct {
 	Priority   float32 `xml:"priority"`
 }
 
+// Asp is a structure of <AspNet Sitemap-File>
 type Asp struct {
 	XMLName      xml.Name      `xml:"siteMap"`
-	SitemapNodes []SitemapNode `xml:"siteMapNode"`
+	SitemapNodes []Node `xml:"siteMapNode"`
 }
 
-type SitemapNode struct {
-	Url          string        `xml:"url,attr"`
-	SitemapNodes []SitemapNode `xml:"siteMapNode"`
+// SitemapNode is a structure of <SitemapNode> in <AspNet Sitemap-File>
+type Node struct {
+	URL          string        `xml:"url,attr"`
+	SitemapNodes []Node `xml:"siteMapNode"`
 }
 
 // fetch is page acquisition function
@@ -76,9 +78,8 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 	} else if idxErr != nil {
 		if aspErr != nil {
 			return smap, nil
-		} else {
-			return asp.get(), nil
 		}
+			return asp.get(), nil
 	}
 
 	return idx.get(data, options)
@@ -111,9 +112,9 @@ func (a *Asp) get() Sitemap {
 	return smap
 }
 
-func addToSitemap(smap *Sitemap, nodes []SitemapNode) {
+func addToSitemap(smap *Sitemap, nodes []Node) {
 	for _, s := range nodes {
-		smap.URL = append(smap.URL, URL{Loc: s.Url})
+		smap.URL = append(smap.URL, URL{Loc: s.URL})
 		if len(s.SitemapNodes) != 0 {
 			addToSitemap(smap, s.SitemapNodes)
 		}
@@ -132,6 +133,7 @@ func ParseIndex(data []byte) (idx Index, err error) {
 	return
 }
 
+// ParseIndex create Asp data from text
 func ParseAsp(data []byte) (asp Asp, err error) {
 	err = xml.Unmarshal(data, &asp)
 	return
