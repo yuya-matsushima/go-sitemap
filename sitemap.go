@@ -36,13 +36,13 @@ type URL struct {
 
 // Asp is a structure of <AspNet Sitemap-File>
 type Asp struct {
-	XMLName      xml.Name      `xml:"siteMap"`
-	SitemapNodes []Node `xml:"siteMapNode"`
+	XMLName      xml.Name `xml:"siteMap"`
+	SitemapNodes []Node   `xml:"siteMapNode"`
 }
 
 // Node is a structure of <sitemapNode> in <AspNet Sitemap-File>
 type Node struct {
-	URL          string        `xml:"url,attr"`
+	URL          string `xml:"url,attr"`
 	SitemapNodes []Node `xml:"siteMapNode"`
 }
 
@@ -79,7 +79,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 		if aspErr != nil {
 			return smap, nil
 		}
-			return asp.get(), nil
+		return asp.get(), nil
 	}
 
 	return idx.get(data, options)
