@@ -1,8 +1,8 @@
 ## Setup
 setup:
-	go get github.com/golang/lint/golint
+	go get golang.org/x/lint/golint
 	go get github.com/Songmu/make2help/cmd/make2help
-	go get -u -v github.com/mattn/go-colorable
+	go get github.com/mattn/go-colorable
 
 ## test
 test:
