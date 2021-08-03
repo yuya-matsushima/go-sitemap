@@ -44,6 +44,10 @@ var fetch = func(URL string, options interface{}) ([]byte, error) {
 	}
 	defer res.Body.Close()
 
+	if res.ContentLength == 0 {
+		return body, errors.New("content length is 0")
+	}
+
 	return ioutil.ReadAll(res.Body)
 }
 
@@ -86,7 +90,8 @@ func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc, options)
 		if err != nil {
-			return smap, err
+			// continue with next sitemap on error
+			continue
 		}
 
 		err = xml.Unmarshal(data, &smap)

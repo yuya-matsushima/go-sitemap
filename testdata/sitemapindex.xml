@@ -13,4 +13,8 @@
 		<loc>http://HOST/sitemap-3.xml</loc>
 		<lastmod>2015-05-10T15:42:38+00:00</lastmod>
 	</sitemap>
+	<sitemap>
+		<loc>http://HOST/sitemap-5.xml</loc>
+		<lastmod>2015-05-10T15:42:38+00:00</lastmod>
+	</sitemap>
 </sitemapindex>

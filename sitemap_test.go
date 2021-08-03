@@ -18,6 +18,7 @@ var getTests = []getTest{
 	{"sitemap.xml", true, 13, "normal test"},
 	{"empty.xml", false, 0, "This sitemap.xml is not exist."},
 	{"sitemapindex.xml", true, 39, "sitemap index test"},
+	{"sitemap-5.xml", false, 0, "Sitemap is empty"},
 }
 
 func TestGet(t *testing.T) {
@@ -54,7 +55,7 @@ func TestParseIndex(t *testing.T) {
 	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
 	idx, _ := ParseIndex(data)
 
-	if len(idx.Sitemap) != 3 {
+	if len(idx.Sitemap) != 4 {
 		t.Error("ParseIndex() should return Index.Sitemap(3 length)")
 	}
 }
