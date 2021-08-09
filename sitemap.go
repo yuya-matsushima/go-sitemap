@@ -34,21 +34,23 @@ type URL struct {
 	Priority   float32 `xml:"priority"`
 }
 
-// fetch is page acquisition function
-var fetch = func(URL string, options interface{}) ([]byte, error) {
-	var body []byte
+var (
+	// fetch is page acquisition function
+	fetch = func(URL string, options interface{}) ([]byte, error) {
+		var body []byte
 
-	res, err := http.Get(URL)
-	if err != nil {
-		return body, err
+		res, err := http.Get(URL)
+		if err != nil {
+			return body, err
+		}
+		defer res.Body.Close()
+
+		return ioutil.ReadAll(res.Body)
 	}
-	defer res.Body.Close()
 
-	return ioutil.ReadAll(res.Body)
-}
-
-// Time interval to be used in Index.get
-var interval = time.Second
+	// Time interval to be used in Index.get
+	interval = time.Second
+)
 
 // Get sitemap data from URL
 func Get(URL string, options interface{}) (Sitemap, error) {
