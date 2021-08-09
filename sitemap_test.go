@@ -63,21 +63,57 @@ func TestGet(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
-	smap, _ := Parse(data)
+	t.Run("sitemap.xml exists", func(t *testing.T) {
+		data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+		smap, err := Parse(data)
 
-	if len(smap.URL) != 13 {
-		t.Error("Parse() should return Sitemap.URL(13 length)")
-	}
+		if err != nil {
+			t.Errorf("Parse() should not return error. result:%v", err)
+		}
+
+		if len(smap.URL) != 13 {
+			t.Errorf("Parse() should return Sitemap.URL. result:%d expected:%d", 13, len(smap.URL))
+		}
+	})
+
+	t.Run("sitemap.xml not exists", func(t *testing.T) {
+		smap, err := Parse([]byte{})
+
+		if err.Error() != "sitemap.xml is empty." {
+			t.Errorf("Parse() should return error. result:%s expected:%s", err.Error(), "sitemap.xml is empty.")
+		}
+
+		if len(smap.URL) != 0 {
+			t.Errorf("Parse() should return Sitemap.URL. result:%d expected:%d", 0, len(smap.URL))
+		}
+	})
 }
 
 func TestParseIndex(t *testing.T) {
-	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
-	idx, _ := ParseIndex(data)
+	t.Run("sitemapindex.xml exists", func(t *testing.T) {
+		data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+		idx, err := ParseIndex(data)
 
-	if len(idx.Sitemap) != 3 {
-		t.Error("ParseIndex() should return Index.Sitemap(3 length)")
-	}
+		if err != nil {
+			t.Errorf("ParseIndex() should not return error. result:%v", err)
+		}
+
+		if len(idx.Sitemap) != 3 {
+			t.Errorf("ParseIndex() should return Sitemap. result:%d expected:%d", 3, len(idx.Sitemap))
+		}
+	})
+
+	t.Run("sitemapinde.xml not exists", func(t *testing.T) {
+		idx, err := ParseIndex([]byte{})
+
+		if err.Error() != "sitemapindex.xml is empty." {
+			t.Errorf("ParseIndex() should not return error. result:%s expected:%s", err.Error(), "sitemapindex.xml is empty.")
+		}
+
+		if len(idx.Sitemap) != 0 {
+			t.Errorf("ParseIndex() should return Sitemap. result:%d expected:%d", 0, len(idx.Sitemap))
+		}
+	})
 }
 
 func TestSetInterval(t *testing.T) {
