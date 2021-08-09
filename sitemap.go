@@ -68,7 +68,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 		} else {
 			err = smapErr
 		}
-		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex: %v", err)
+		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex.: %v", err)
 	} else if idxErr != nil {
 		return smap, nil
 	}
@@ -89,12 +89,12 @@ func (idx *Index) get(options interface{}) (Sitemap, error) {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc, options)
 		if err != nil {
-			return smap, err
+			return smap, fmt.Errorf("failed to retrieve %s in sitemapindex.xml.: %v", s.Loc, err)
 		}
 
 		err = xml.Unmarshal(data, &smap)
 		if err != nil {
-			return smap, err
+			return smap, fmt.Errorf("failed to parse %s in sitemapindex.xml.: %v", s.Loc, err)
 		}
 	}
 

@@ -2,6 +2,7 @@ package sitemap
 
 import (
 	"io/ioutil"
+	"strings"
 	"testing"
 	"time"
 )
@@ -18,19 +19,19 @@ var getTests = []getTest{
 	// sitemap.xml test
 	{"sitemap.xml", 13, false, ""},
 	// sitemap.xml is empty.
-	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
 	// sitemap.xml is not exist.
-	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
 	// sitemapindex.xml test
 	{"sitemapindex.xml", 39, false, ""},
 	// sitemapindex.xml is empty.
-	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
 	// sitemapindex.xml is not exist.
-	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
 	// sitemapindex.xml contains empty sitemap.xml
-	{"contains_empty_sitemap_sitemapindex.xml", 0, true, "EOF"}, // TODO: fix error message
+	{"contains_empty_sitemap_sitemapindex.xml", 0, true, "failed to parse http://HOST/empty_sitemap.xml in sitemapindex.xml.: EOF"},
 	// sitemapindex.xml contains sitemap.xml that is not exist.
-	{"contains_not_exist_sitemap_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	{"contains_not_exist_sitemap_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
 }
 
 func TestGet(t *testing.T) {
@@ -42,13 +43,19 @@ func TestGet(t *testing.T) {
 	for i, test := range getTests {
 		data, err := Get(server.URL+"/"+test.smapName, nil)
 
+		// replace HOST in Error Message
+		errMsg := test.ErrStr
+		if strings.Contains(errMsg, "HOST") {
+			errMsg = strings.Replace(errMsg, "http://HOST", server.URL, 1)
+		}
+
 		if test.hasErr {
 			if err == nil {
-				t.Errorf("%d: Get() should has error. expected:%s", i, test.ErrStr)
+				t.Errorf("%d: Get() should has error. expected:%s", i, errMsg)
 			}
 
-			if err.Error() != test.ErrStr {
-				t.Errorf("%d: Get() shoud return error. result:%s expected:%s", i, err.Error(), test.ErrStr)
+			if err.Error() != errMsg {
+				t.Errorf("%d: Get() shoud return error. result:%s expected:%s", i, err.Error(), errMsg)
 			}
 		} else {
 			if err != nil {
