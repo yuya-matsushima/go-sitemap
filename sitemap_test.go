@@ -23,7 +23,7 @@ var getTests = []getTest{
 }
 
 func TestGet(t *testing.T) {
-	server := server()
+	server := testServer()
 	defer server.Close()
 
 	SetInterval(time.Nanosecond)
@@ -91,7 +91,7 @@ func TestSetFetch(t *testing.T) {
 }
 
 func BenchmarkGetSitemap(b *testing.B) {
-	server := server()
+	server := testServer()
 	defer server.Close()
 
 	for i := 0; i < b.N; i++ {
@@ -103,7 +103,7 @@ func BenchmarkGetSitemap(b *testing.B) {
 }
 
 func BenchmarkGetSitemapIndex(b *testing.B) {
-	server := server()
+	server := testServer()
 	defer server.Close()
 
 	for i := 0; i < b.N; i++ {
