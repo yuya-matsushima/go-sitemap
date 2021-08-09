@@ -116,35 +116,6 @@ func TestParseIndex(t *testing.T) {
 	})
 }
 
-func TestSetInterval(t *testing.T) {
-	newInterval := 3 * time.Second
-	SetInterval(newInterval)
-
-	if interval != newInterval {
-		t.Error("interval should be time.Minute")
-	}
-
-	if interval == time.Second {
-		t.Error("interval should not be Default(time.Second)")
-	}
-}
-
-func TestSetFetch(t *testing.T) {
-	f := func(URL string, options interface{}) ([]byte, error) {
-		var err error
-		return []byte(URL), err
-	}
-
-	SetFetch(f)
-
-	URL := "http://example.com"
-	data, _ := fetch(URL, nil)
-
-	if string(data) != URL {
-		t.Error("fetch() should return " + URL)
-	}
-}
-
 // func BenchmarkGetSitemap(b *testing.B) {
 // 	server := testServer()
 // 	defer server.Close()
