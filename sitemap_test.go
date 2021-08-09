@@ -11,17 +11,19 @@ type getTest struct {
 	smapName string
 	isNil    bool
 	count    int
-	comment  string
 }
 
 var getTests = []getTest{
-	{"sitemap.xml", true, 13, "normal test"},
-	{"empty.xml", false, 0, "This sitemap.xml is not exist."},
-	{"sitemapindex.xml", true, 39, "sitemap index test"},
+	// normal test
+	{"sitemap.xml", true, 13},
+	// This sitemap.xml is not exist.
+	{"empty.xml", false, 0},
+	// sitemap index test
+	{"sitemapindex.xml", true, 39},
 }
 
 func TestGet(t *testing.T) {
-	server := server()
+	server := testServer()
 	defer server.Close()
 
 	SetInterval(time.Nanosecond)
@@ -88,36 +90,48 @@ func TestSetFetch(t *testing.T) {
 	}
 }
 
-func BenchmarkGetSitemap(b *testing.B) {
-	server := server()
-	defer server.Close()
-
-	for i := 0; i < b.N; i++ {
-		Get(server.URL+"/sitemap.xml", nil)
-	}
-}
-
-func BenchmarkGetSitemapIndex(b *testing.B) {
-	server := server()
-	defer server.Close()
-
-	for i := 0; i < b.N; i++ {
-		Get(server.URL+"/sitemapindex.xml", nil)
-	}
-}
-
-func BenchmarkParseSitemap(b *testing.B) {
-	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
-
-	for i := 0; i < b.N; i++ {
-		Parse(data)
-	}
-}
-
-func BenchmarkParseSitemapIndex(b *testing.B) {
-	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
-
-	for i := 0; i < b.N; i++ {
-		ParseIndex(data)
-	}
-}
+// func BenchmarkGetSitemap(b *testing.B) {
+// 	server := testServer()
+// 	defer server.Close()
+//
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := Get(server.URL+"/sitemap.xml", nil)
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+// 	}
+// }
+//
+// func BenchmarkGetSitemapIndex(b *testing.B) {
+// 	server := testServer()
+// 	defer server.Close()
+//
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := Get(server.URL+"/sitemapindex.xml", nil)
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+// 	}
+// }
+//
+// func BenchmarkParseSitemap(b *testing.B) {
+// 	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+//
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := Parse(data)
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+// 	}
+// }
+//
+// func BenchmarkParseSitemapIndex(b *testing.B) {
+// 	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+//
+// 	for i := 0; i < b.N; i++ {
+// 		_, err := ParseIndex(data)
+// 		if err != nil {
+// 			b.Error(err)
+// 		}
+// 	}
+// }

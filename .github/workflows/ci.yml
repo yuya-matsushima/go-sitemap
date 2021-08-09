@@ -1,0 +1,45 @@
+on: [push]
+name: CI
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.14.x, 1.15.x, 1.16.x]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ matrix.os }}-${{ matrix.go-version }}-build-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ matrix.os }}-${{ matrix.go-version }}-build-${{ hashFiles('**/go.sum') }}
+          ${{ matrix.os }}-${{ matrix.go-version }}-build-
+          ${{ matrix.os }}-${{ matrix.go-version }}-
+    - run: go mod download
+    - run: go test -v -cover ./...
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: 1.16.x
+    - uses: actions/checkout@v2
+    - uses: golangci/golangci-lint-action@v2
+      with:
+        version: latest
+    - run: golangci-lint run ./...
+
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: 1.16.x
+    - uses: actions/checkout@v2
+    - run: go test -bench . -benchmem

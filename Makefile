@@ -1,17 +1,15 @@
 ## Setup
 setup:
-	go get golang.org/x/lint/golint
 	go get github.com/Songmu/make2help/cmd/make2help
 	go get github.com/mattn/go-colorable
 
 ## test
 test:
-	go test -v -cover .
+	go test -v -cover ./...
 
 ## lint
 lint:
-	golint .
-	go vet .
+	golangci-lint run ./...
 
 ## benchmark
 benchmark:
