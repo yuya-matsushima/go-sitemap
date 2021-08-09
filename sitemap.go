@@ -86,7 +86,53 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 		return smap, nil
 	}
 
-	smap, err = idx.get(options)
+	smap, err = idx.get(options, false)
+	if err != nil {
+		return Sitemap{}, err
+	}
+
+	return smap, nil
+}
+
+/*
+ForceGet is fetch and parse sitemap.xml/sitemapindex.xml.
+The difference with the Get function is that it ignores some errors.
+
+Errors to Ignore:
+
+・When sitemapindex.xml contains a sitemap.xml URL that cannot be retrieved.
+・When sitemapindex.xml contains a sitemap.xml that is empty
+・When sitemapindex.xml contains a sitemap.xml that has format problems.
+
+Errors not to Ignore:
+
+・When sitemap.xml/sitemapindex.xml could not retrieved.
+・When sitemap.xml/sitemapindex.xml is empty.
+・When sitemap.xml/sitemapindex.xml has format problems.
+
+If you want **not** to ignore some errors, use the Get function.
+*/
+func ForceGet(URL string, options interface{}) (Sitemap, error) {
+	data, err := fetch(URL, options)
+	if err != nil {
+		return Sitemap{}, err
+	}
+
+	idx, idxErr := ParseIndex(data)
+	smap, smapErr := Parse(data)
+
+	if idxErr != nil && smapErr != nil {
+		if idxErr != nil {
+			err = idxErr
+		} else {
+			err = smapErr
+		}
+		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex.: %v", err)
+	} else if idxErr != nil {
+		return smap, nil
+	}
+
+	smap, err = idx.get(options, true)
 	if err != nil {
 		return Sitemap{}, err
 	}
@@ -95,18 +141,18 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 }
 
 // Get Sitemap data from sitemapindex file
-func (idx *Index) get(options interface{}) (Sitemap, error) {
+func (idx *Index) get(options interface{}, ignoreErr bool) (Sitemap, error) {
 	var smap Sitemap
 
 	for _, s := range idx.Sitemap {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc, options)
-		if err != nil {
+		if !ignoreErr && err != nil {
 			return smap, fmt.Errorf("failed to retrieve %s in sitemapindex.xml.: %v", s.Loc, err)
 		}
 
 		err = xml.Unmarshal(data, &smap)
-		if err != nil {
+		if !ignoreErr && err != nil {
 			return smap, fmt.Errorf("failed to parse %s in sitemapindex.xml.: %v", s.Loc, err)
 		}
 	}
