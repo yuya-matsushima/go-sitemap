@@ -52,7 +52,20 @@ var (
 	interval = time.Second
 )
 
-// Get sitemap data from URL
+/*
+Get is fetch and parse sitemap.xml/sitemapindex.xml
+
+If sitemap.xml or sitemapindex.xml has some problems, This function return error.
+
+・When sitemap.xml/sitemapindex.xml could not retrieved.
+・When sitemap.xml/sitemapindex.xml is empty.
+・When sitemap.xml/sitemapindex.xml has format problems.
+・When sitemapindex.xml contains a sitemap.xml URL that cannot be retrieved.
+・When sitemapindex.xml contains a sitemap.xml that is empty
+・When sitemapindex.xml contains a sitemap.xml that has format problems.
+
+If you want to ignore these errors, use the ForceGet function.
+*/
 func Get(URL string, options interface{}) (Sitemap, error) {
 	data, err := fetch(URL, options)
 	if err != nil {
