@@ -9,17 +9,28 @@ import (
 // getTest is structure for test
 type getTest struct {
 	smapName string
-	isNil    bool
 	count    int
+	hasErr   bool
+	ErrStr   string
 }
 
 var getTests = []getTest{
-	// normal test
-	{"sitemap.xml", true, 13},
-	// This sitemap.xml is not exist.
-	{"empty.xml", false, 0},
-	// sitemap index test
-	{"sitemapindex.xml", true, 39},
+	// sitemap.xml test
+	{"sitemap.xml", 13, false, ""},
+	// sitemap.xml is empty.
+	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	// sitemap.xml is not exist.
+	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	// sitemapindex.xml test
+	{"sitemapindex.xml", 39, false, ""},
+	// sitemapindex.xml is empty.
+	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	// sitemapindex.xml is not exist.
+	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
+	// sitemapindex.xml contains empty sitemap.xml
+	{"contains_empty_sitemap_sitemapindex.xml", 0, true, "EOF"}, // TODO: fix error message
+	// sitemapindex.xml contains sitemap.xml that is not exist.
+	{"contains_not_exist_sitemap_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: EOF"},
 }
 
 func TestGet(t *testing.T) {
@@ -31,14 +42,22 @@ func TestGet(t *testing.T) {
 	for i, test := range getTests {
 		data, err := Get(server.URL+"/"+test.smapName, nil)
 
-		if test.isNil == true && err != nil {
-			t.Errorf("test:%d Get() should not has error:%s", i, err.Error())
-		} else if test.isNil == false && err == nil {
-			t.Errorf("test:%d Get() should has error", i)
+		if test.hasErr {
+			if err == nil {
+				t.Errorf("%d: Get() should has error. expected:%s", i, test.ErrStr)
+			}
+
+			if err.Error() != test.ErrStr {
+				t.Errorf("%d: Get() shoud return error. result:%s expected:%s", i, err.Error(), test.ErrStr)
+			}
+		} else {
+			if err != nil {
+				t.Errorf("%d: Get() should not has error. result: %s", i, err.Error())
+			}
 		}
 
 		if test.count != len(data.URL) {
-			t.Errorf("test:%d Get() should return Sitemap.Url:%d actual: %d", i, test.count, len(data.URL))
+			t.Errorf("%d: Get() should return Sitemap.Url:%d expected: %d", i, len(data.URL), test.count)
 		}
 	}
 }
