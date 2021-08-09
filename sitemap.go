@@ -2,7 +2,7 @@ package sitemap
 
 import (
 	"encoding/xml"
-	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -61,7 +61,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 	smap, smapErr := Parse(data)
 
 	if idxErr != nil && smapErr != nil {
-		return Sitemap{}, errors.New("URL is not a sitemap or sitemapindex")
+		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex: %v", err)
 	} else if idxErr != nil {
 		return smap, nil
 	}
