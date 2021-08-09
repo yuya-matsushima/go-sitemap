@@ -73,7 +73,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 		return smap, nil
 	}
 
-	smap, err = idx.get(data, options)
+	smap, err = idx.get(options)
 	if err != nil {
 		return Sitemap{}, err
 	}
@@ -82,13 +82,9 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 }
 
 // Get Sitemap data from sitemapindex file
-func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
-	idx, err := ParseIndex(data)
-	if err != nil {
-		return Sitemap{}, err
-	}
-
+func (idx *Index) get(options interface{}) (Sitemap, error) {
 	var smap Sitemap
+
 	for _, s := range idx.Sitemap {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc, options)
@@ -102,7 +98,7 @@ func (s *Index) get(data []byte, options interface{}) (Sitemap, error) {
 		}
 	}
 
-	return smap, err
+	return smap, nil
 }
 
 // Parse create Sitemap data from text
