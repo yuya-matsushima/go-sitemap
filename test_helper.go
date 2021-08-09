@@ -21,7 +21,7 @@ func server() *httptest.Server {
 		}
 		str := strings.Replace(string(res), "HOST", r.Host, -1)
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, str)
+		fmt.Fprint(w, str)
 	}))
 
 	return server
