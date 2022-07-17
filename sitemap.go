@@ -11,11 +11,11 @@ import (
 // Index is a structure of <sitemapindex>
 type Index struct {
 	XMLName xml.Name    `xml:"sitemapindex"`
-	Sitemap []indexPart `xml:"sitemap"`
+	Sitemap []IndexPart `xml:"sitemap"`
 }
 
-// indexPart is a structure of <sitemap> in <sitemapindex>
-type indexPart struct {
+// IndexPart is a structure of <sitemap> in <sitemapindex>
+type IndexPart struct {
 	Loc     string `xml:"loc"`
 	LastMod string `xml:"lastmod"`
 }
