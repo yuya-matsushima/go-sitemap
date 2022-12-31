@@ -29,6 +29,7 @@ jobs:
     - uses: actions/setup-go@v3
       with:
         go-version: 1.19.x
+        args: --timeout=3m --issues-exit-code=0 ./...
     - uses: actions/checkout@v3
     - uses: golangci/golangci-lint-action@v3
       with:
@@ -42,6 +43,6 @@ jobs:
     - uses: actions/setup-go@v3
       with:
         go-version: 1.19.x
-        args: --timeout=3m --issues-exit-code=0 ./...
     - uses: actions/checkout@v3
+    - run: go mod download github.com/Songmu/make2help
     - run: go test -bench . -benchmem
