@@ -9,5 +9,5 @@ go-sitemap get sitemap.xml (or sitemapindex.xml) and generate Sitemap object.
 ## Installation
 
 ```
-go get github.com/yterajima/go-sitemap
+go install github.com/yterajima/go-sitemap
 ```
