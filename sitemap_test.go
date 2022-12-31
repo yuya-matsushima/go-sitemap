@@ -1,7 +1,7 @@
 package sitemap
 
 import (
-	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -125,7 +125,7 @@ func TestForceGet(t *testing.T) {
 
 func TestParse(t *testing.T) {
 	t.Run("sitemap.xml exists", func(t *testing.T) {
-		data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+		data, _ := os.ReadFile("./testdata/sitemap.xml")
 		smap, err := Parse(data)
 
 		if err != nil {
@@ -152,7 +152,7 @@ func TestParse(t *testing.T) {
 
 func TestParseIndex(t *testing.T) {
 	t.Run("sitemapindex.xml exists", func(t *testing.T) {
-		data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+		data, _ := os.ReadFile("./testdata/sitemapindex.xml")
 		idx, err := ParseIndex(data)
 
 		if err != nil {

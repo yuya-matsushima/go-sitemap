@@ -1,7 +1,7 @@
 package sitemap
 
 import (
-	"io/ioutil"
+	"os"
 	"testing"
 )
 
@@ -60,7 +60,7 @@ func BenchmarkForceGet(b *testing.B) {
 }
 
 func BenchmarkParseSitemap(b *testing.B) {
-	data, _ := ioutil.ReadFile("./testdata/sitemap.xml")
+	data, _ := os.ReadFile("./testdata/sitemap.xml")
 
 	for i := 0; i < b.N; i++ {
 		_, err := Parse(data)
@@ -71,7 +71,7 @@ func BenchmarkParseSitemap(b *testing.B) {
 }
 
 func BenchmarkParseSitemapIndex(b *testing.B) {
-	data, _ := ioutil.ReadFile("./testdata/sitemapindex.xml")
+	data, _ := os.ReadFile("./testdata/sitemapindex.xml")
 
 	for i := 0; i < b.N; i++ {
 		_, err := ParseIndex(data)

@@ -2,7 +2,7 @@ package sitemap
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -16,7 +16,7 @@ func testServer() *httptest.Server {
 			return
 		}
 
-		res, err := ioutil.ReadFile("./testdata" + r.RequestURI)
+		res, err := os.ReadFile("./testdata" + r.RequestURI)
 		if err != nil {
 			http.NotFound(w, r)
 			return
