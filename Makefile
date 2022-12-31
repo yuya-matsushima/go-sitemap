@@ -1,7 +1,3 @@
-## Setup
-setup:
-	go install github.com/mattn/go-colorable
-
 ## test
 test:
 	go test -v -cover ./...
