@@ -1,7 +1,7 @@
 ## Setup
 setup:
-	go get github.com/Songmu/make2help/cmd/make2help
-	go get github.com/mattn/go-colorable
+	go install github.com/Songmu/make2help/cmd/make2help@latest
+	go install github.com/mattn/go-colorable
 
 ## test
 test:
