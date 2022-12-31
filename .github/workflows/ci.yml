@@ -34,7 +34,6 @@ jobs:
     - uses: golangci/golangci-lint-action@v3
       with:
         version: latest
-    - run: go mod download github.com/Songmu/make2help
     - run: golangci-lint run ./...
 
   benchmark:
@@ -44,5 +43,4 @@ jobs:
       with:
         go-version: 1.19.x
     - uses: actions/checkout@v3
-    - run: go mod download github.com/Songmu/make2help
     - run: go test -bench . -benchmem
