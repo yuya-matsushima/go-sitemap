@@ -3,7 +3,7 @@ package sitemap
 import (
 	"encoding/xml"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
@@ -45,7 +45,7 @@ var (
 		}
 		defer res.Body.Close()
 
-		return ioutil.ReadAll(res.Body)
+		return io.ReadAll(res.Body)
 	}
 
 	// Time interval to be used in Index.get

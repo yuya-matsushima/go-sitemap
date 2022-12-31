@@ -2,7 +2,7 @@ package sitemap
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"time"
 )
@@ -41,7 +41,7 @@ func ExampleGet_changeFetch() {
 		}
 		defer res.Body.Close()
 
-		body, err := ioutil.ReadAll(res.Body)
+		body, err := io.ReadAll(res.Body)
 		if err != nil {
 			return []byte{}, err
 		}
