@@ -19,19 +19,19 @@ var getTests = []getTest{
 	// sitemap.xml test
 	{"sitemap.xml", 13, false, ""},
 	// sitemap.xml is empty.
-	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/empty_sitemap.xml"},
 	// sitemap.xml is not exist.
-	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/not_exist_sitemap.xml"},
 	// sitemapindex.xml test
 	{"sitemapindex.xml", 39, false, ""},
 	// sitemapindex.xml is empty.
-	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/empty_sitemapindex.xml"},
 	// sitemapindex.xml is not exist.
-	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/not_exist_sitemapindex.xml"},
 	// sitemapindex.xml contains empty sitemap.xml
-	{"contains_empty_sitemap_sitemapindex.xml", 0, true, "failed to parse http://HOST/empty_sitemap.xml in sitemapindex.xml.: EOF"},
+	{"contains_empty_sitemap_sitemapindex.xml", 0, true, "failed to parse http://HOST/empty_sitemap.xml in sitemapindex.xml: EOF"},
 	// sitemapindex.xml contains sitemap.xml that is not exist.
-	{"contains_not_exist_sitemap_sitemapindex.xml", 0, true, "failed to parse http://HOST/not_exist_sitemap.xml in sitemapindex.xml.: EOF"},
+	{"contains_not_exist_sitemap_sitemapindex.xml", 0, true, "failed to parse http://HOST/not_exist_sitemap.xml in sitemapindex.xml: EOF"},
 }
 
 func TestGet(t *testing.T) {
@@ -73,15 +73,15 @@ var forceGetTests = []getTest{
 	// sitemap.xml test
 	{"sitemap.xml", 13, false, ""},
 	// sitemap.xml is empty.
-	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"empty_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/empty_sitemap.xml"},
 	// sitemap.xml is not exist.
-	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"not_exist_sitemap.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/not_exist_sitemap.xml"},
 	// sitemapindex.xml test
 	{"sitemapindex.xml", 39, false, ""},
 	// sitemapindex.xml is empty.
-	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"empty_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/empty_sitemapindex.xml"},
 	// sitemapindex.xml is not exist.
-	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex.: EOF"},
+	{"not_exist_sitemapindex.xml", 0, true, "URL is not a sitemap or sitemapindex: http://HOST/not_exist_sitemapindex.xml"},
 	// sitemapindex.xml contains empty sitemap.xml
 	{"contains_empty_sitemap_sitemapindex.xml", 13, false, ""},
 	// sitemapindex.xml contains sitemap.xml that is not exist.
@@ -140,8 +140,8 @@ func TestParse(t *testing.T) {
 	t.Run("sitemap.xml not exists", func(t *testing.T) {
 		smap, err := Parse([]byte{})
 
-		if err.Error() != "sitemap.xml is empty." {
-			t.Errorf("Parse() should return error. result:%s expected:%s", err.Error(), "sitemap.xml is empty.")
+		if err.Error() != "sitemap.xml is empty" {
+			t.Errorf("Parse() should return error. result:%s expected:%s", err.Error(), "sitemap.xml is empty")
 		}
 
 		if len(smap.URL) != 0 {
@@ -167,8 +167,8 @@ func TestParseIndex(t *testing.T) {
 	t.Run("sitemapinde.xml not exists", func(t *testing.T) {
 		idx, err := ParseIndex([]byte{})
 
-		if err.Error() != "sitemapindex.xml is empty." {
-			t.Errorf("ParseIndex() should not return error. result:%s expected:%s", err.Error(), "sitemapindex.xml is empty.")
+		if err.Error() != "sitemapindex.xml is empty" {
+			t.Errorf("ParseIndex() should not return error. result:%s expected:%s", err.Error(), "sitemapindex.xml is empty")
 		}
 
 		if len(idx.Sitemap) != 0 {
