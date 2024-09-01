@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -148,6 +149,34 @@ func (idx *Index) get(options interface{}, ignoreErr bool) (Sitemap, error) {
 	}
 
 	return smap, nil
+}
+
+// ReadSitemap is a function that reads a file and returns a Sitemap structure.
+func ReadSitemap(path string) (Sitemap, error) {
+	if _, err := os.Stat(path); err != nil {
+		return Sitemap{}, fmt.Errorf("file not found %s: %s", path, err)
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Sitemap{}, fmt.Errorf("failed to read file %s: %s", path, err)
+	}
+
+	return Parse(data)
+}
+
+// ReadSitemapIndex is a function that reads a file and returns a Index structure.
+func ReadSitemapIndex(path string) (Index, error) {
+	if _, err := os.Stat(path); err != nil {
+		return Index{}, fmt.Errorf("file not found %s: %s", path, err)
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Index{}, fmt.Errorf("failed to read file %s: %s", path, err)
+	}
+
+	return ParseIndex(data)
 }
 
 // Parse create Sitemap data from text
