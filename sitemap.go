@@ -154,12 +154,12 @@ func (idx *Index) get(options interface{}, ignoreErr bool) (Sitemap, error) {
 // ReadSitemap is a function that reads a file and returns a Sitemap structure.
 func ReadSitemap(path string) (Sitemap, error) {
 	if _, err := os.Stat(path); err != nil {
-		return Sitemap{}, fmt.Errorf("file not found %s: %s", path, err)
+		return Sitemap{}, fmt.Errorf("file not found %s", path)
 	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return Sitemap{}, fmt.Errorf("failed to read file %s: %s", path, err)
+		return Sitemap{}, fmt.Errorf("failed to read file %s", path)
 	}
 
 	return Parse(data)
@@ -168,12 +168,12 @@ func ReadSitemap(path string) (Sitemap, error) {
 // ReadSitemapIndex is a function that reads a file and returns a Index structure.
 func ReadSitemapIndex(path string) (Index, error) {
 	if _, err := os.Stat(path); err != nil {
-		return Index{}, fmt.Errorf("file not found %s: %s", path, err)
+		return Index{}, fmt.Errorf("file not found %s", path)
 	}
 
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return Index{}, fmt.Errorf("failed to read file %s: %s", path, err)
+		return Index{}, fmt.Errorf("failed to read file %s", path)
 	}
 
 	return ParseIndex(data)
