@@ -172,7 +172,7 @@ func TestReadSitemapIndex(t *testing.T) {
 
 		errText := "file not found ./testdata/not_exist_sitemapindex.xml"
 		if err.Error() != errText {
-			t.Errorf("ReadSitemapIndex() should not return error. result:%s expected:%s", err.Error(), errText)
+			t.Errorf("ReadSitemapIndex() should return error. result:%s expected:%s", err.Error(), errText)
 		}
 
 		if len(idx.Sitemap) != 0 {
@@ -203,7 +203,7 @@ func TestParse(t *testing.T) {
 		}
 
 		if len(smap.URL) != 0 {
-			t.Errorf("Parse() should return Sitemap.URL. result:%d expected:%d", 0, len(smap.URL))
+			t.Errorf("Parse() should not return Sitemap.URL. result:%d expected:%d", 0, len(smap.URL))
 		}
 	})
 }
@@ -226,11 +226,11 @@ func TestParseIndex(t *testing.T) {
 		idx, err := ParseIndex([]byte{})
 
 		if err.Error() != "sitemapindex.xml is empty" {
-			t.Errorf("ParseIndex() should not return error. result:%s expected:%s", err.Error(), "sitemapindex.xml is empty")
+			t.Errorf("ParseIndex() should return error. result:%s expected:%s", err.Error(), "sitemapindex.xml is empty")
 		}
 
 		if len(idx.Sitemap) != 0 {
-			t.Errorf("ParseIndex() should return Sitemap. result:%d expected:%d", 0, len(idx.Sitemap))
+			t.Errorf("ParseIndex() should not return Sitemap. result:%d expected:%d", 0, len(idx.Sitemap))
 		}
 	})
 }
