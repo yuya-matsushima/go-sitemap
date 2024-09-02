@@ -58,3 +58,25 @@ func ExampleGet_changeFetch() {
 		fmt.Println(URL.Loc)
 	}
 }
+
+func ExampleReadSitemap() {
+	smap, err := ReadSitemap("./testdata/sitemap.xml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, URL := range smap.URL {
+		fmt.Println(URL.Loc)
+	}
+}
+
+func ExampleReadSitemapIndex() {
+	index, err := ReadSitemap("./testdata/sitemapindex.xml")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	for _, URL := range index.URL {
+		fmt.Println(URL.Loc)
+	}
+}

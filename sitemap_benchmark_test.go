@@ -59,6 +59,28 @@ func BenchmarkForceGet(b *testing.B) {
 	})
 }
 
+func BenchmarkReadSitemap(b *testing.B) {
+	path := "./testdata/sitemap.xml"
+
+	for i := 0; i < b.N; i++ {
+		_, err := ReadSitemap(path)
+		if err != nil {
+			b.Error(err)
+		}
+	}
+}
+
+func BenchmarkReadSitemapIndex(b *testing.B) {
+	path := "./testdata/sitemapindex.xml"
+
+	for i := 0; i < b.N; i++ {
+		_, err := ReadSitemapIndex(path)
+		if err != nil {
+			b.Error(err)
+		}
+	}
+}
+
 func BenchmarkParseSitemap(b *testing.B) {
 	data, _ := os.ReadFile("./testdata/sitemap.xml")
 

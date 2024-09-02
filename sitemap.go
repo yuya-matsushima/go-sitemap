@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -76,12 +77,7 @@ func Get(URL string, options interface{}) (Sitemap, error) {
 	smap, smapErr := Parse(data)
 
 	if idxErr != nil && smapErr != nil {
-		if idxErr != nil {
-			err = idxErr
-		} else {
-			err = smapErr
-		}
-		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex.: %v", err)
+		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex: %s", URL)
 	} else if idxErr != nil {
 		return smap, nil
 	}
@@ -122,12 +118,7 @@ func ForceGet(URL string, options interface{}) (Sitemap, error) {
 	smap, smapErr := Parse(data)
 
 	if idxErr != nil && smapErr != nil {
-		if idxErr != nil {
-			err = idxErr
-		} else {
-			err = smapErr
-		}
-		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex.: %v", err)
+		return Sitemap{}, fmt.Errorf("URL is not a sitemap or sitemapindex: %s", URL)
 	} else if idxErr != nil {
 		return smap, nil
 	}
@@ -148,23 +139,51 @@ func (idx *Index) get(options interface{}, ignoreErr bool) (Sitemap, error) {
 		time.Sleep(interval)
 		data, err := fetch(s.Loc, options)
 		if !ignoreErr && err != nil {
-			return smap, fmt.Errorf("failed to retrieve %s in sitemapindex.xml.: %v", s.Loc, err)
+			return smap, fmt.Errorf("failed to retrieve %s in sitemapindex.xml: %v", s.Loc, err)
 		}
 
 		err = xml.Unmarshal(data, &smap)
 		if !ignoreErr && err != nil {
-			return smap, fmt.Errorf("failed to parse %s in sitemapindex.xml.: %v", s.Loc, err)
+			return smap, fmt.Errorf("failed to parse %s in sitemapindex.xml: %v", s.Loc, err)
 		}
 	}
 
 	return smap, nil
 }
 
+// ReadSitemap is a function that reads a file and returns a Sitemap structure.
+func ReadSitemap(path string) (Sitemap, error) {
+	if _, err := os.Stat(path); err != nil {
+		return Sitemap{}, fmt.Errorf("file not found %s", path)
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Sitemap{}, fmt.Errorf("failed to read file %s", path)
+	}
+
+	return Parse(data)
+}
+
+// ReadSitemapIndex is a function that reads a file and returns a Index structure.
+func ReadSitemapIndex(path string) (Index, error) {
+	if _, err := os.Stat(path); err != nil {
+		return Index{}, fmt.Errorf("file not found %s", path)
+	}
+
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return Index{}, fmt.Errorf("failed to read file %s", path)
+	}
+
+	return ParseIndex(data)
+}
+
 // Parse create Sitemap data from text
 func Parse(data []byte) (Sitemap, error) {
 	var smap Sitemap
 	if len(data) == 0 {
-		return smap, fmt.Errorf("sitemap.xml is empty.")
+		return smap, fmt.Errorf("sitemap.xml is empty")
 	}
 
 	err := xml.Unmarshal(data, &smap)
@@ -175,7 +194,7 @@ func Parse(data []byte) (Sitemap, error) {
 func ParseIndex(data []byte) (Index, error) {
 	var idx Index
 	if len(data) == 0 {
-		return idx, fmt.Errorf("sitemapindex.xml is empty.")
+		return idx, fmt.Errorf("sitemapindex.xml is empty")
 	}
 
 	err := xml.Unmarshal(data, &idx)
